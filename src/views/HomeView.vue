@@ -27,6 +27,19 @@ export default {
       this.currentPlace = place;
       document.querySelector("#place-details").showModal();
     },
+    editPlace: function (place) {
+      var editPlaceParams = place;
+      axios.patch("/places/" + place.id, editPlaceParams).then((response) => {
+        console.log("updated", response.data);
+      });
+    },
+    destroyPlace: function (place) {
+      axios.delete("/places/" + place.id).then((response) => {
+        console.log("deleted", response.data);
+        var index = this.places.indexOf(place);
+        this.places.splice(index, 1);
+      });
+    },
   },
 };
 </script>
@@ -56,9 +69,17 @@ export default {
     <dialog id="place-details">
       <form method="dialog">
         <h4>Place info</h4>
-        <p>Name : {{ currentPlace.name }}</p>
-        <p>Address : {{ currentPlace.address }}</p>
+        <p>
+          Name :
+          <input type="text" v-model="currentPlace.name" />
+        </p>
+        <p>
+          Address :
+          <input type="text" v-model="currentPlace.address" />
+        </p>
         <button>Close</button>
+        <button v-on:click="editPlace(currentPlace)">Update</button>
+        <button v-on:click="destroyPlace(currentPlace)">Delete</button>
       </form>
     </dialog>
   </div>
