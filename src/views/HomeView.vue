@@ -6,6 +6,7 @@ export default {
     return {
       places: [],
       newPlaceParams: {},
+      currentPlace: {},
     };
   },
   created: function () {
@@ -22,6 +23,10 @@ export default {
         this.newPlaceParams = {};
       });
     },
+    showPlace: function (place) {
+      this.currentPlace = place;
+      document.querySelector("#place-details").showModal();
+    },
   },
 };
 </script>
@@ -30,21 +35,31 @@ export default {
   <div class="home">
     <h1>All your places!</h1>
 
-    <form action="">
-      <p>
-        Name :
-        <input type="text" v-model="this.newPlaceParams.name" />
-      </p>
-      <p>
-        Address :
-        <input type="text" v-model="this.newPlaceParams.address" />
-      </p>
-      <button v-on:click="createPlace()">Add Place!</button>
-    </form>
+    <p>
+      Name :
+      <input type="text" v-model="this.newPlaceParams.name" />
+    </p>
+    <p>
+      Address :
+      <input type="text" v-model="this.newPlaceParams.address" />
+    </p>
+    <button v-on:click="createPlace()">Add Place!</button>
   </div>
 
   <div v-for="place in places" :key="place.id">
     <p>Name: {{ place.name }}</p>
     <p>Address: {{ place.address }}</p>
+    <button v-on:click="showPlace(place)">Show more</button>
+  </div>
+
+  <div>
+    <dialog id="place-details">
+      <form method="dialog">
+        <h4>Place info</h4>
+        <p>Name : {{ currentPlace.name }}</p>
+        <p>Address : {{ currentPlace.address }}</p>
+        <button>Close</button>
+      </form>
+    </dialog>
   </div>
 </template>
