@@ -17,11 +17,16 @@ export default {
   },
   methods: {
     createPlace: function () {
-      axios.post("/places", this.newPlaceParams).then((response) => {
-        console.log("place created!", response);
-        this.places.push(response.data);
-        this.newPlaceParams = {};
-      });
+      axios
+        .post("/places", this.newPlaceParams)
+        .then((response) => {
+          console.log("place created!", response);
+          this.places.push(response.data);
+          this.newPlaceParams = {};
+        })
+        .catch((error) => {
+          this.errors = error.response.data.errors;
+        });
     },
     showPlace: function (place) {
       this.currentPlace = place;
@@ -29,9 +34,14 @@ export default {
     },
     editPlace: function (place) {
       var editPlaceParams = place;
-      axios.patch("/places/" + place.id, editPlaceParams).then((response) => {
-        console.log("updated", response.data);
-      });
+      axios
+        .patch("/places/" + place.id, editPlaceParams)
+        .then((response) => {
+          console.log("updated", response.data);
+        })
+        .catch((error) => {
+          this.errors = error.response.data.errors;
+        });
     },
     destroyPlace: function (place) {
       axios.delete("/places/" + place.id).then((response) => {
